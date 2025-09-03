@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 let servidor;
 
 BeforeAll(function() {
-  servidor = spawn('uvicorn', ['app.main:app', '--port', '8000']);
+  servidor = spawn('uvicorn', ['app.main:app', '--host', '0.0.0.0', '--port', '8000']);
   return new Promise(resolve => setTimeout(resolve, 1000));
 });
 
@@ -15,22 +15,22 @@ AfterAll(function() {
 });
 
 When('creo un usuario con nombre {string} y correo {string}', async function (nombre, correo) {
-  this.respuesta = await axios.post('http://localhost:8000/usuarios', { nombre, correo });
+  this.respuesta = await axios.post('http://127.0.0.1:8000/usuarios', { nombre, correo });
   this.usuarioId = this.respuesta.data.id;
 });
 
 Given('que existe un usuario con nombre {string} y correo {string}', async function (nombre, correo) {
-  const res = await axios.post('http://localhost:8000/usuarios', { nombre, correo });
+  const res = await axios.post('http://127.0.0.1:8000/usuarios', { nombre, correo });
   this.usuarioId = res.data.id;
   this.respuesta = res;
 });
 
 When('actualizo el usuario a nombre {string}', async function (nuevoNombre) {
-  this.respuesta = await axios.put(`http://localhost:8000/usuarios/${this.usuarioId}`, { nombre: nuevoNombre });
+  this.respuesta = await axios.put(`http://127.0.0.1:8000/usuarios/${this.usuarioId}`, { nombre: nuevoNombre });
 });
 
 When('agrego la certificación {string} al usuario', async function (certificacion) {
-  this.respuesta = await axios.post(`http://localhost:8000/usuarios/${this.usuarioId}/certificaciones`, { nombre: certificacion });
+  this.respuesta = await axios.post(`http://127.0.0.1:8000/usuarios/${this.usuarioId}/certificaciones`, { nombre: certificacion });
 });
 
 Then('el resultado es exitoso', function () {

@@ -9,5 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+    "dependencies": {
+    "@cucumber/cucumber": "^10.0.2",
+    "axios": "^1.6.7"
+  }
 }
